@@ -1,4 +1,5 @@
 import { Record } from 'immutable';
+
 import { Product } from '../shared/interfaces/product';
 
 export class ReadonlyProduct

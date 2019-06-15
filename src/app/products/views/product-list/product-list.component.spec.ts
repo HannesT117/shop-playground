@@ -1,14 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ProductListComponent } from './product-list.component';
 import { DebugElement } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ProductsService } from '../../products.service';
-import { Product } from '../../../shared/interfaces/product';
+import { Store } from '@ngrx/store';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { List } from 'immutable';
-import { of } from 'rxjs';
 import { click } from 'src/testing';
+
+import { Product } from '../../../shared/interfaces/product';
 import { ReadonlyProduct } from '../../readonly-product';
+import { ProductsState } from '../../store/products.reducers';
+import * as fromProducts from '../../store/products.selectors';
+import { ProductListComponent } from './product-list.component';
 
 const mockData: List<Product> = List(
   Array(10)
@@ -29,8 +31,7 @@ describe('ProductListComponent', () => {
   let fixture: ComponentFixture<ProductListComponent>;
 
   class Page {
-    fetchProductsSpy: jest.SpyInstance;
-    selectSpy: jest.SpyInstance;
+    store: MockStore<ProductsState>;
 
     get products(): Array<DebugElement> {
       return fixture.debugElement.queryAll(By.css('.product'));
@@ -42,12 +43,9 @@ describe('ProductListComponent', () => {
     }
 
     constructor(fix: ComponentFixture<ProductListComponent>) {
-      const productsService = fix.debugElement.injector.get(
-        ProductsService
-      ) as jest.Mocked<ProductsService>;
-
-      this.fetchProductsSpy = productsService.fetchProducts;
-      this.selectSpy = productsService.select;
+      this.store = fix.debugElement.injector.get(Store) as MockStore<
+        ProductsState
+      >;
     }
   }
 
@@ -55,22 +53,14 @@ describe('ProductListComponent', () => {
     fixture = TestBed.createComponent(ProductListComponent);
     page = new Page(fixture);
 
-    page.fetchProductsSpy.mockReturnValue(of(mockData));
+    page.store.overrideSelector(fromProducts.getProducts, mockData);
     fixture.detectChanges();
   }
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ProductListComponent],
-      providers: [
-        {
-          provide: ProductsService,
-          useValue: {
-            fetchProducts: jest.fn(),
-            select: jest.fn()
-          }
-        }
-      ]
+      providers: [provideMockStore()]
     }).compileComponents();
   }));
 
@@ -92,9 +82,12 @@ describe('ProductListComponent', () => {
   });
 
   it('should pass selected products to the service', () => {
+    const dispatchSpy = jest.spyOn(page.store, 'dispatch');
     page.click(page.products[1]);
     fixture.detectChanges();
 
-    expect(page.selectSpy).toHaveBeenCalledWith(mockData.get(1));
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ product: mockData.get(1) })
+    );
   });
 });
