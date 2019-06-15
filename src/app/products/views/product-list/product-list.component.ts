@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { addToCart } from 'src/app/store/actions';
 
 import { Product } from '../../../shared/interfaces/product';
@@ -19,10 +18,7 @@ export class ProductListComponent implements OnInit {
   constructor(private store: Store<Iterable<Product>>) {}
 
   ngOnInit() {
-    this.products$ = this.store.pipe(
-      select(fromProducts.getProducts),
-      tap(data => console.error(data))
-    );
+    this.products$ = this.store.pipe(select(fromProducts.getProducts));
   }
 
   select(product: Product) {
