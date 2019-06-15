@@ -7,11 +7,13 @@ export class ReadonlyProduct
     id: '-1',
     price: '',
     description: '',
-    stock: 0
+    stock: 0,
+    amountInCart: 0
   })
   implements Product {
   readonly id: string;
   readonly price: string;
   readonly description: string;
   readonly stock: number;
+  readonly amountInCart: number;
 }

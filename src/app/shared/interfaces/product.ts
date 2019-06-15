@@ -3,4 +3,5 @@ export interface Product {
   readonly price: string;
   readonly description: string;
   readonly stock: number;
+  readonly amountInCart: number;
 }

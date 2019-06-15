@@ -1,13 +1,12 @@
-<div *ngIf="items$ | async | keyvalue as items">
+<div *ngIf="items$ | async as items">
   <div *ngFor="let item of items">
-    {{ item.key.description }}
+    {{ item.description }}
     <input
       #amount
+      (change)="changeAmount(item, amount.value)"
       type="number"
+      value="{{ item.amountInCart }}"
       min="0"
-      max="{{ item.key.stock }}"
-      value="{{ item.value }}"
-      (change)="changeAmount(item.key, amount.value)"
     />
   </div>
 </div>

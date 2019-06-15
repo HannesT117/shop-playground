@@ -1,15 +1,15 @@
 import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Store } from '@ngrx/store';
+import { MemoizedSelector, Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { List } from 'immutable';
+import { ProductsState } from 'src/app/store/reducers';
 import { click } from 'src/testing';
 
 import { Product } from '../../../shared/interfaces/product';
+import * as fromRoot from '../../../store/selectors';
 import { ReadonlyProduct } from '../../readonly-product';
-import { ProductsState } from '../../store/products.reducers';
-import * as fromProducts from '../../store/products.selectors';
 import { ProductListComponent } from './product-list.component';
 
 const mockData: List<Product> = List(
@@ -21,7 +21,8 @@ const mockData: List<Product> = List(
           id: index.toString(),
           description: `This is the item with id ${index}`,
           price: (index + 1.5).toString(),
-          stock: 10
+          stock: 10,
+          amountInCart: 8
         })
     )
 );
@@ -32,6 +33,7 @@ describe('ProductListComponent', () => {
 
   class Page {
     store: MockStore<ProductsState>;
+    items: MemoizedSelector<ProductsState, Iterable<Product>>;
 
     get products(): Array<DebugElement> {
       return fixture.debugElement.queryAll(By.css('.product'));
@@ -53,7 +55,7 @@ describe('ProductListComponent', () => {
     fixture = TestBed.createComponent(ProductListComponent);
     page = new Page(fixture);
 
-    page.store.overrideSelector(fromProducts.getProducts, mockData);
+    page.items = page.store.overrideSelector(fromRoot.getProducts, mockData);
     fixture.detectChanges();
   }
 
@@ -73,11 +75,16 @@ describe('ProductListComponent', () => {
   it('should display products', () => {
     expect(page.products.length).toBe(10);
     page.products.forEach((item, index) => {
-      expect(item.children[0].nativeElement.innerHTML).toBe(
-        `This is the item with id ${index}`
-      );
-      expect(item.children[1].nativeElement.innerHTML).toBe(`${index + 1.5}`);
-      expect(item.children[2].nativeElement.innerHTML).toBe('10');
+      const extract = (cssClass: string) =>
+        item.nativeElement.querySelector(cssClass).innerHTML;
+
+      const description = extract('.description');
+      const price = extract('.price');
+      const stock = extract('.stock');
+
+      expect(description).toBe(`This is the item with id ${index}`);
+      expect(price).toBe(`${index + 1.5}`);
+      expect(stock).toBe('2');
     });
   });
 
