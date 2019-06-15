@@ -1,0 +1,13 @@
+<div *ngIf="items$ | async | keyvalue as items">
+  <div *ngFor="let item of items">
+    {{ item.key.description }}
+    <input
+      #amount
+      type="number"
+      min="0"
+      max="{{ item.key.stock }}"
+      value="{{ item.value }}"
+      (change)="changeAmount(item.key, amount.value)"
+    />
+  </div>
+</div>
