@@ -11,7 +11,5 @@ export class OrderCheckoutComponent implements OnInit {
 
   ngOnInit() {}
 
-  addAddress(address: Address): void {
-    alert(address);
-  }
+  addAddress(address: Address): void {}
 }
