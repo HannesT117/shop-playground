@@ -78,7 +78,7 @@ describe('ProductListComponent', () => {
 
       const description = extract('.description');
       const price = extract('.price');
-      const stock = extract('.stock');
+      const stock = extract('.available');
 
       expect(description).toBe(`This is the item with id ${index}`);
       expect(price).toBe(`${index + 1.5}`);

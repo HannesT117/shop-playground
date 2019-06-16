@@ -4,11 +4,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AddressFormComponent } from './components/address-form/address-form.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { ProductComponent } from './components/product/product.component';
 
 @NgModule({
-  declarations: [AddressFormComponent, ProductComponent, NavbarComponent],
+  declarations: [AddressFormComponent, NavbarComponent],
   imports: [CommonModule, ReactiveFormsModule],
-  exports: [AddressFormComponent, ProductComponent, NavbarComponent]
+  exports: [AddressFormComponent, NavbarComponent]
 })
 export class SharedModule {}

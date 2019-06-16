@@ -9,7 +9,7 @@ import { List } from 'immutable';
 import { ReadonlyProduct } from 'src/app/products/readonly-product';
 import { Product } from 'src/app/shared/interfaces/product';
 import { ShopState } from 'src/app/store/reducers';
-import { getItemsInCart, getSumInCart } from 'src/app/store/selectors';
+import { getItemsInCart, getSumOfCart } from 'src/app/store/selectors';
 import { click } from 'src/testing';
 
 import { CartDetailComponent } from './cart-detail.component';
@@ -61,7 +61,7 @@ describe('ProductListComponent', () => {
       const router = TestBed.get(Router);
 
       this.products = store.overrideSelector(getItemsInCart, List());
-      store.overrideSelector(getSumInCart, 5);
+      store.overrideSelector(getSumOfCart, 5);
 
       this.dispatcherSpy = jest.spyOn(store, 'dispatch');
       this.navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();

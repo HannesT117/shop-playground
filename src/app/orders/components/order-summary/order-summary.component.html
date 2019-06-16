@@ -20,7 +20,9 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="4">Invoice Amount: {{ 0 | currency: 'EUR' }}</td>
+        <td colspan="4">
+          Invoice Amount: {{ sum$ | async | currency: 'EUR' }}
+        </td>
       </tr>
     </tfoot>
   </table>

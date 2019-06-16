@@ -4,7 +4,7 @@ import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Product } from 'src/app/shared/interfaces/product';
 import { addToCart, removeFromCart } from 'src/app/store/actions';
-import { getItemsInCart, getSumInCart } from 'src/app/store/selectors';
+import { getItemsInCart, getSumOfCart } from 'src/app/store/selectors';
 
 @Component({
   selector: 'app-cart-detail',
@@ -23,7 +23,7 @@ export class CartDetailComponent implements OnInit {
 
   ngOnInit() {
     this.items$ = this.store.pipe(select(getItemsInCart));
-    this.sum$ = this.store.pipe(select(getSumInCart));
+    this.sum$ = this.store.pipe(select(getSumOfCart));
   }
 
   changeAmount(product: Product, amount: number): void {
