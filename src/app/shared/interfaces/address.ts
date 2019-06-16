@@ -1,6 +1,7 @@
 export interface Address {
   firstName: string;
-  surname: string;
+  lastName: string;
   street: string;
-  postalCode: string;
+  zipCode: string;
+  city: string;
 }
