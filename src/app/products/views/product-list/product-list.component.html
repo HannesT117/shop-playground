@@ -1,8 +1,15 @@
-<div class="product" *ngFor="let product of products$ | async">
-  <app-product [product]="product"></app-product>
-  <div class="cart-button">
-    <button (click)="select(product)" class="btn btn-light">
-      Add to cart
-    </button>
+<div class="container">
+  <h1>Our Products</h1>
+  <div class="row" *ngFor="let product of products$ | async">
+    <app-product [product]="product" class="col-10"></app-product>
+    <div class="col-2 cart-button">
+      <button
+        (click)="select(product)"
+        class="btn btn-light"
+        [disabled]="product.stock - product.amountInCart === 0"
+      >
+        Add to cart
+      </button>
+    </div>
   </div>
 </div>
