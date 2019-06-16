@@ -3,15 +3,19 @@ import { List, Record } from 'immutable';
 import { Product } from 'src/app/shared/interfaces/product';
 
 import { ReadonlyProduct } from '../products/readonly-product';
+import { Order } from '../shared/interfaces';
 import * as fromActions from './actions';
 
 export interface ShopState {
   readonly products: Iterable<Product>;
+  readonly orders: Iterable<Order>;
 }
 
-export class ImmutableShopState extends Record({ products: List<Product>() })
+export class ImmutableShopState
+  extends Record({ products: List<Product>(), orders: List<Order>() })
   implements ShopState {
   readonly products: List<Product>;
+  readonly order: List<Order>;
 }
 
 export const initialState = new ImmutableShopState({
@@ -28,7 +32,8 @@ export const initialState = new ImmutableShopState({
             amountInCart: 0
           })
       )
-  )
+  ),
+  orders: List()
 });
 
 export const reducer = createReducer(
@@ -41,7 +46,16 @@ export const reducer = createReducer(
         product.update('amountInCart', () => 0)
       )
     )
-  )
+  ),
+  on(fromActions.createOrder, (state: ImmutableShopState, { address, id }) => {
+    return state.update('orders', orders =>
+      orders.push({
+        address,
+        id,
+        items: state.products.filter(item => item.amountInCart > 0)
+      })
+    );
+  })
 );
 
 function removeFromCart(state: ImmutableShopState, { product, amount = 1 }) {

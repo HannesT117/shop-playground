@@ -10,7 +10,7 @@ const routes: Routes = [
     component: OrderCheckoutComponent
   },
   {
-    path: 'confirmation',
+    path: ':id',
     component: OrderConfirmationComponent
   },
   {

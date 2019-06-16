@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Address } from 'src/app/shared/interfaces';
+import { ActivatedRoute, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { Address, Product } from 'src/app/shared/interfaces';
+import { createOrder } from 'src/app/store/actions';
+import { ShopState } from 'src/app/store/reducers';
+import { getCartSummary } from 'src/app/store/selectors';
+import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: 'app-order-checkout',
@@ -7,9 +14,26 @@ import { Address } from 'src/app/shared/interfaces';
   styleUrls: ['./order-checkout.component.scss']
 })
 export class OrderCheckoutComponent implements OnInit {
-  constructor() {}
+  cartSummary$: Observable<{
+    items: Iterable<Product>;
+    sum: number;
+  }>;
 
-  ngOnInit() {}
+  constructor(
+    private readonly store: Store<ShopState>,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
+  ) {}
 
-  addAddress(address: Address): void {}
+  ngOnInit() {
+    this.cartSummary$ = this.store.pipe(select(getCartSummary));
+  }
+
+  submit(address: Address): void {
+    const id = uuid();
+    this.store.dispatch(createOrder({ address, id }));
+    this.router.navigate([id], {
+      relativeTo: this.route
+    });
+  }
 }

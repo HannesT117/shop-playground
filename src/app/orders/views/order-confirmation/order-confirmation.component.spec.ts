@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { OrderConfirmationComponent } from './order-confirmation.component';
 
@@ -8,9 +9,9 @@ describe('OrderConfirmationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OrderConfirmationComponent ]
-    })
-    .compileComponents();
+      declarations: [OrderConfirmationComponent],
+      imports: [RouterTestingModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

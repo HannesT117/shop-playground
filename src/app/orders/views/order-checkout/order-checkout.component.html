@@ -3,11 +3,16 @@
   <div class="row">
     <div class="col address">
       <h2>Delivery Address</h2>
-      <app-address-form (submitAddress)="addAddress($event)"></app-address-form>
+      <app-address-form (submitAddress)="submit($event)"></app-address-form>
     </div>
     <div class="col summary">
       <h2>Summary</h2>
-      <app-order-summary class="col-2"></app-order-summary>
+      <app-order-summary
+        *ngIf="cartSummary$ | async as summary"
+        [items]="summary.items"
+        [sum]="summary.sum"
+        class="col-2"
+      ></app-order-summary>
     </div>
   </div>
 </div>
