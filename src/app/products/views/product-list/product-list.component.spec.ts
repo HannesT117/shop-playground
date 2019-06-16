@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { MemoizedSelector, Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { List } from 'immutable';
-import { ProductsState } from 'src/app/store/reducers';
+import { ShopState } from 'src/app/store/reducers';
 import { click } from 'src/testing';
 
 import { Product } from '../../../shared/interfaces/product';
@@ -32,8 +32,8 @@ describe('ProductListComponent', () => {
   let fixture: ComponentFixture<ProductListComponent>;
 
   class Page {
-    store: MockStore<ProductsState>;
-    items: MemoizedSelector<ProductsState, Iterable<Product>>;
+    store: MockStore<ShopState>;
+    items: MemoizedSelector<ShopState, Iterable<Product>>;
 
     get products(): Array<DebugElement> {
       return fixture.debugElement.queryAll(By.css('.product'));
@@ -45,9 +45,7 @@ describe('ProductListComponent', () => {
     }
 
     constructor(fix: ComponentFixture<ProductListComponent>) {
-      this.store = fix.debugElement.injector.get(Store) as MockStore<
-        ProductsState
-      >;
+      this.store = fix.debugElement.injector.get(Store) as MockStore<ShopState>;
     }
   }
 

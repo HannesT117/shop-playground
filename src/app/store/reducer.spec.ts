@@ -33,7 +33,7 @@ describe('Reducer', () => {
     const products = mockProducts.update(5, item =>
       item.set('amountInCart', 99)
     );
-    const initialState = new fromProducts.ReadonlyProductsState({ products });
+    const initialState = new fromProducts.ImmutableShopState({ products });
     const action = fromActions.removeFromCart({
       product: products.get(5)
     });
@@ -47,7 +47,7 @@ describe('Reducer', () => {
     const products = mockProducts.update(5, item =>
       item.set('amountInCart', 0)
     );
-    const initialState = new fromProducts.ReadonlyProductsState({ products });
+    const initialState = new fromProducts.ImmutableShopState({ products });
     const action = fromActions.removeFromCart({
       product: products.get(5)
     });
@@ -61,7 +61,7 @@ describe('Reducer', () => {
     const products = mockProducts.update(5, item =>
       item.set('stock', 10).set('amountInCart', 9)
     );
-    const initialState = new fromProducts.ReadonlyProductsState({ products });
+    const initialState = new fromProducts.ImmutableShopState({ products });
     const action = fromActions.addToCart({
       product: products.get(5),
       amount: 2

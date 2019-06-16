@@ -493,6 +493,16 @@
   resolved "https://registry.yarnpkg.com/@ngrx/core/-/core-1.2.0.tgz#882b46abafa2e0e6d887cb71a1b2c2fa3e6d0dc6"
   integrity sha1-iCtGq6+i4ObYh8txobLC+j5tDcY=
 
+"@ngrx/schematics@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@ngrx/schematics/-/schematics-8.0.1.tgz#d6655eb045ff79fcf891062b7fc00115ca7543da"
+  integrity sha512-BnHYRHkzAqXKDRQW5WZoSOwxJkHmwsd/bEJ5wRinplVRSUJY0BYgCVe1by1hj37/FAsRH5E6WBtoOgUyn0i/MQ==
+
+"@ngrx/store-devtools@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@ngrx/store-devtools/-/store-devtools-8.0.1.tgz#4c4e5458994afe3eaa487375e13a9c60edc3a84e"
+  integrity sha512-TxOksSARaQ1hCZM0/qMCun6axbSFuhSEmuW9YLRhuU5m3gvJN4cr5tk960DDVGl8/06YX6Q2CQ7uIgx5qCwbsg==
+
 "@ngrx/store@^8.0.1":
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-8.0.1.tgz#5391498d50978ff1bfdbf4e5b04cb647677a5168"
