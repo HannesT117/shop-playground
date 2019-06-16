@@ -1,12 +1,26 @@
-<div *ngIf="items$ | async as items">
-  <div *ngFor="let item of items">
-    {{ item.description }}
-    <input
-      #amount
-      (change)="changeAmount(item, amount.value)"
-      type="number"
-      value="{{ item.amountInCart }}"
-      min="0"
-    />
-  </div>
+<div class="container">
+  <h1>Shopping Cart</h1>
+  <ng-container *ngIf="items$ | async as items" class="container">
+    <ng-container *ngIf="notEmpty(items); else empty">
+      <div *ngFor="let product of items" class="row product">
+        <app-product [product]="product" class="col-10"></app-product>
+        <div class="form-group" class="col-2">
+          <input
+            #amount
+            (change)="changeAmount(product, amount.value)"
+            type="number"
+            value="{{ product.amountInCart }}"
+            min="0"
+            class="form-control"
+          />
+        </div>
+      </div>
+      <button (click)="goToCheckout()" class="btn btn-primary checkout">
+        Proceed to checkout
+      </button>
+    </ng-container>
+  </ng-container>
+  <ng-template>
+    <p>There don't seem to be any items in your cart.</p>
+  </ng-template>
 </div>
