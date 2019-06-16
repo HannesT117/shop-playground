@@ -9,7 +9,7 @@ import { List } from 'immutable';
 import { ReadonlyProduct } from 'src/app/products/readonly-product';
 import { Product } from 'src/app/shared/interfaces/product';
 import { ShopState } from 'src/app/store/reducers';
-import { getItemsInCart } from 'src/app/store/selectors';
+import { getItemsInCart, getSumInCart } from 'src/app/store/selectors';
 import { click } from 'src/testing';
 
 import { CartDetailComponent } from './cart-detail.component';
@@ -40,11 +40,15 @@ describe('ProductListComponent', () => {
     navigateSpy: jest.SpyInstance;
 
     get productElements(): Array<DebugElement> {
-      return fixture.debugElement.queryAll(By.css('.product'));
+      return fixture.debugElement.query(By.css('tbody')).queryAll(By.css('tr'));
     }
 
     get checkoutButton(): DebugElement {
       return fixture.debugElement.query(By.css('.checkout'));
+    }
+
+    get sum(): string {
+      return fixture.debugElement.query(By.css('.sum')).nativeElement.innerHTML;
     }
 
     click(product: DebugElement) {
@@ -57,6 +61,8 @@ describe('ProductListComponent', () => {
       const router = TestBed.get(Router);
 
       this.products = store.overrideSelector(getItemsInCart, List());
+      store.overrideSelector(getSumInCart, 5);
+
       this.dispatcherSpy = jest.spyOn(store, 'dispatch');
       this.navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
     }
@@ -85,7 +91,7 @@ describe('ProductListComponent', () => {
     expect(fixture.debugElement.componentInstance).toBeTruthy();
   });
 
-  it('should display checkout button when cart is empty', () => {
+  it('should hide checkout button when cart is empty', () => {
     fixture.detectChanges();
 
     expect(page.checkoutButton).toBeFalsy();
@@ -96,6 +102,7 @@ describe('ProductListComponent', () => {
     fixture.detectChanges();
 
     expect(page.productElements.length).toBe(10);
+    expect(page.sum).toBe('€5.00');
     expect(page.checkoutButton).toBeTruthy();
   });
 
