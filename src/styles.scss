@@ -1,11 +1,2 @@
 /* You can add global styles to this file, and also import other style files */
-body {
-  max-width: 1000px;
-  margin: auto;
-}
-
-@media all and (min-width: 600px) {
-  body {
-    padding: 0% 5%;
-  }
-}
+@import url('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');

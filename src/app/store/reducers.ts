@@ -3,18 +3,22 @@ import { List, Record } from 'immutable';
 import { Product } from 'src/app/shared/interfaces/product';
 
 import { ReadonlyProduct } from '../products/readonly-product';
+import { Order } from '../shared/interfaces';
 import * as fromActions from './actions';
 
-export interface ProductsState {
+export interface ShopState {
   readonly products: Iterable<Product>;
+  readonly orders: Iterable<Order>;
 }
 
-export class ReadonlyProductsState extends Record({ products: List<Product>() })
-  implements ProductsState {
+export class ImmutableShopState
+  extends Record({ products: List<Product>(), orders: List<Order>() })
+  implements ShopState {
   readonly products: List<Product>;
+  readonly order: List<Order>;
 }
 
-export const initialState = new ReadonlyProductsState({
+export const initialState = new ImmutableShopState({
   products: List(
     Array(40)
       .fill('')
@@ -22,13 +26,14 @@ export const initialState = new ReadonlyProductsState({
         (_, index) =>
           new ReadonlyProduct({
             id: index.toString(),
-            description: `This is the item with id ${index}`,
-            price: (index * 1.5).toString(),
-            stock: 10,
+            description: `Item ${index}`,
+            price: (Math.random() * Math.floor(1000)).toFixed(2).toString(),
+            stock: Math.floor(Math.random() * Math.floor(30)),
             amountInCart: 0
           })
       )
-  )
+  ),
+  orders: List()
 });
 
 export const reducer = createReducer(
@@ -41,10 +46,19 @@ export const reducer = createReducer(
         product.update('amountInCart', () => 0)
       )
     )
-  )
+  ),
+  on(fromActions.createOrder, (state: ImmutableShopState, { address, id }) => {
+    return state.update('orders', orders =>
+      orders.push({
+        address,
+        id,
+        items: state.products.filter(item => item.amountInCart > 0)
+      })
+    );
+  })
 );
 
-function removeFromCart(state: ReadonlyProductsState, { product, amount = 1 }) {
+function removeFromCart(state: ImmutableShopState, { product, amount = 1 }) {
   const index = state.products.findIndex(item => item.id === product.id);
 
   return state.updateIn(['products', index, 'amountInCart'], currentAmount =>
@@ -52,11 +66,17 @@ function removeFromCart(state: ReadonlyProductsState, { product, amount = 1 }) {
   );
 }
 
-function addToCart(state: ReadonlyProductsState, { product, amount = 1 }) {
+function addToCart(state: ImmutableShopState, { product, amount = 1 }) {
   const index = state.products.findIndex(item => item.id === product.id);
-  const stock = state.products.get(index).stock;
+  const productInList = state.products.get(index);
+
+  if (!productInList) {
+    return state;
+  }
 
   return state.updateIn(['products', index, 'amountInCart'], amountInCart =>
-    amountInCart + amount > stock ? stock : amountInCart + amount
+    amountInCart + amount > productInList.stock
+      ? productInList.stock
+      : amountInCart + amount
   );
 }
