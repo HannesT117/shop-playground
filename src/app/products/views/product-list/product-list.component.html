@@ -1,9 +1,5 @@
 <div class="product" *ngFor="let product of products$ | async">
-  <div class="product-description">
-    <div class="description">{{ product.description }}</div>
-    <div class="price">{{ product.price }}</div>
-    <div class="stock">{{ product.stock - product.amountInCart }}</div>
-  </div>
+  <app-product [product]="product"></app-product>
   <div class="cart-button">
     <button (click)="select(product)">Add to cart</button>
   </div>

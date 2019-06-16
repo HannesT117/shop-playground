@@ -1,0 +1,12 @@
+.product {
+  display: flex;
+  justify-content: space-between;
+}
+
+.product-description {
+  display: flex;
+  justify-content: space-between;
+  > * {
+    width: 20%;
+  }
+}

@@ -1,17 +1,3 @@
-.product {
-  display: flex;
-  justify-content: space-between;
-}
-
-.product-description {
-  flex-grow: 4;
-  display: flex;
-  justify-content: space-between;
-  > * {
-    width: 20%;
-  }
-}
-
 .cart-button  {
   flex-grow: 1;
 }
