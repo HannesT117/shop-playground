@@ -18,3 +18,11 @@ export const getItemsInCart = createSelector(
       product => product.amountInCart > 0
     )
 );
+
+export const getSumOfCart = createSelector(
+  getItemsInCart,
+  items =>
+    items
+      .map(item => item.amountInCart * +item.price)
+      .reduce((acc, curr) => acc + curr, 0)
+);
