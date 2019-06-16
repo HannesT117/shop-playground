@@ -22,9 +22,9 @@ export const initialState = new ImmutableShopState({
         (_, index) =>
           new ReadonlyProduct({
             id: index.toString(),
-            description: `This is the item with id ${index}`,
-            price: (index * 1.5).toString(),
-            stock: 10,
+            description: `Item ${index}`,
+            price: (Math.random() * Math.floor(1000)).toFixed(2).toString(),
+            stock: Math.floor(Math.random() * Math.floor(30)),
             amountInCart: 0
           })
       )
