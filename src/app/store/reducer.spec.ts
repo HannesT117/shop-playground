@@ -1,6 +1,7 @@
 import { List } from 'immutable';
 
 import { ReadonlyProduct } from '../products/readonly-product';
+import { Order } from '../shared/interfaces';
 import * as fromActions from './actions';
 import * as fromProducts from './reducers';
 
@@ -70,5 +71,71 @@ describe('Reducer', () => {
     const state = fromProducts.reducer(initialState, action);
 
     expect(state.getIn(['products', 5, 'amountInCart'])).toBe(10);
+  });
+
+  describe('when creating an order', () => {
+    it('shoud add a new order to the list of orders', () => {
+      const homeOfSherlock = {
+        firstName: 'John',
+        lastName: 'Doe',
+        street: '221 Baker Street',
+        zipCode: 'NW1 6XE',
+        city: 'London'
+      };
+      const products = mockProducts.update(5, item =>
+        item.set('stock', 10).set('amountInCart', 9)
+      );
+      const initialState = new fromProducts.ImmutableShopState({
+        products,
+        orders: List<Order>()
+      });
+      const action = fromActions.createOrder({
+        address: homeOfSherlock,
+        id: 'someId'
+      });
+
+      const state = fromProducts.reducer(initialState, action);
+
+      expect(state.getIn(['orders', 0, 'id'])).toBe('someId');
+      expect(state.getIn(['orders', 0, 'address'])).toEqual(homeOfSherlock);
+      expect(state.getIn(['orders', 0, 'items', 0, 'id'])).toBe('5');
+    });
+
+    it('should reduce the stock of the items in cart', () => {
+      const products = mockProducts.update(5, item =>
+        item.set('stock', 10).set('amountInCart', 9)
+      );
+      const initialState = new fromProducts.ImmutableShopState({
+        products,
+        orders: List<Order>()
+      });
+      const action = fromActions.createOrder({
+        address: {} as any,
+        id: 'someId'
+      });
+
+      const state = fromProducts.reducer(initialState, action);
+
+      expect(state.getIn(['products', 5, 'stock'])).toBe(1);
+    });
+
+    it('should empty the cart', () => {
+      const products = mockProducts
+        .update(5, item => item.set('stock', 10).set('amountInCart', 9))
+        .update(7, item => item.set('stock', 20).set('amountInCart', 15));
+      const initialState = new fromProducts.ImmutableShopState({
+        products,
+        orders: List<Order>()
+      });
+      const action = fromActions.createOrder({
+        address: {} as any,
+        id: 'someId'
+      });
+
+      const state = fromProducts.reducer(initialState, action);
+
+      expect(state.getIn(['products', 5, 'amountInCart'])).toBe(0);
+      expect(state.getIn(['products', 7, 'amountInCart'])).toBe(0);
+    });
   });
 });
