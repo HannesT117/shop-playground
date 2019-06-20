@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./order-confirmation.component.scss']
 })
 export class OrderConfirmationComponent implements OnInit {
-  orderId$: Observable<string>;
+  orderId$: Observable<string | null>;
 
   constructor(private readonly route: ActivatedRoute) {}
 
