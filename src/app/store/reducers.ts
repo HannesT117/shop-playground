@@ -3,7 +3,7 @@ import { List, Record } from 'immutable';
 import { Product } from 'src/app/shared/interfaces/product';
 
 import { ReadonlyProduct } from '../products/readonly-product';
-import { Order } from '../shared/interfaces';
+import { Address, Order } from '../shared/interfaces';
 import * as fromActions from './actions';
 
 export interface ShopState {
@@ -48,15 +48,31 @@ export const reducer = createReducer(
     )
   ),
   on(fromActions.createOrder, (state: ImmutableShopState, { address, id }) => {
-    return state.update('orders', orders =>
-      orders.push({
-        address,
-        id,
-        items: state.products.filter(item => item.amountInCart > 0)
-      })
-    );
+    return createOrder(state, address, id).update('products', updateStock);
   })
 );
+
+function createOrder(
+  state: ImmutableShopState,
+  address: Address,
+  id: string
+): ImmutableShopState {
+  return state.update('orders', orders =>
+    orders.push({
+      address,
+      id,
+      items: state.products.filter(item => item.amountInCart > 0)
+    })
+  );
+}
+
+function updateStock(products: List<Product>) {
+  return products.map((item: ReadonlyProduct) =>
+    item
+      .update('stock', currentStock => currentStock - item.amountInCart)
+      .update('amountInCart', () => 0)
+  );
+}
 
 function removeFromCart(state: ImmutableShopState, { product, amount = 1 }) {
   const index = state.products.findIndex(item => item.id === product.id);
