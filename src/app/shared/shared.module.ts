@@ -3,11 +3,12 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AddressFormComponent } from './components/address-form/address-form.component';
+import { ItemSummaryComponent } from './components/item-summary/item-summary.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
-  declarations: [AddressFormComponent, NavbarComponent],
+  declarations: [AddressFormComponent, NavbarComponent, ItemSummaryComponent],
   imports: [CommonModule, ReactiveFormsModule],
-  exports: [AddressFormComponent, NavbarComponent]
+  exports: [AddressFormComponent, NavbarComponent, ItemSummaryComponent]
 })
 export class SharedModule {}

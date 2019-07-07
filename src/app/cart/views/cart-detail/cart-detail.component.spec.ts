@@ -39,8 +39,9 @@ describe('ProductListComponent', () => {
     dispatcherSpy: jest.SpyInstance;
     navigateSpy: jest.SpyInstance;
 
-    get productElements(): Array<DebugElement> {
-      return fixture.debugElement.query(By.css('tbody')).queryAll(By.css('tr'));
+    get productElements(): List<Product> {
+      return fixture.debugElement.query(By.css('app-item-summary')).properties
+        .items;
     }
 
     get checkoutButton(): DebugElement {
@@ -56,7 +57,7 @@ describe('ProductListComponent', () => {
       click(button);
     }
 
-    constructor(fix: ComponentFixture<CartDetailComponent>) {
+    constructor() {
       const store = TestBed.get(Store) as MockStore<ShopState>;
       const router = TestBed.get(Router);
 
@@ -71,7 +72,7 @@ describe('ProductListComponent', () => {
   function createComponent(): void {
     fixture = TestBed.createComponent(CartDetailComponent);
     component = fixture.componentInstance;
-    page = new Page(fixture);
+    page = new Page();
   }
 
   beforeEach(async(() => {
@@ -101,7 +102,7 @@ describe('ProductListComponent', () => {
     page.products.setResult(mockData);
     fixture.detectChanges();
 
-    expect(page.productElements.length).toBe(10);
+    expect(page.productElements.size).toBe(10);
     expect(page.sum).toBe('€5.00');
     expect(page.checkoutButton).toBeTruthy();
   });
@@ -117,7 +118,9 @@ describe('ProductListComponent', () => {
   });
 
   it('should decrement items for numbers smaller than current amount', () => {
-    component.changeAmount({ amountInCart: 5 } as any, 3);
+    const event = { item: { amountInCart: 5 }, amount: 3 } as any;
+
+    component.changeAmount(event);
 
     expect(page.dispatcherSpy).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -128,7 +131,9 @@ describe('ProductListComponent', () => {
   });
 
   it('should increment items for numbers bigger than current amount', () => {
-    component.changeAmount({ amountInCart: 5 } as any, 8);
+    const event = { item: { amountInCart: 5 }, amount: 8 } as any;
+
+    component.changeAmount(event);
 
     expect(page.dispatcherSpy).toHaveBeenCalledWith(
       expect.objectContaining({
