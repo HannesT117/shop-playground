@@ -3,11 +3,11 @@
   <div class="row">
     <div class="col-lg order-lg-2 summary">
       <h2>Summary</h2>
-      <app-order-summary
+      <app-item-summary
         *ngIf="cartSummary$ | async as summary"
         [items]="summary.items"
         [sum]="summary.sum"
-      ></app-order-summary>
+      ></app-item-summary>
     </div>
     <div class="col-lg order-lg-1 address">
       <h2>Delivery Address</h2>

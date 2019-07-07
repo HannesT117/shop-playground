@@ -7,7 +7,7 @@ import { ReadonlyProduct } from 'src/app/products/readonly-product';
 import { Product } from 'src/app/shared/interfaces';
 import { ShopState } from 'src/app/store/reducers';
 
-import { OrderSummaryComponent } from './order-summary.component';
+import { ItemSummaryComponent } from './item-summary.component';
 
 const mockData: List<Product> = List(
   Array(10)
@@ -24,10 +24,10 @@ const mockData: List<Product> = List(
     )
 );
 
-describe('OrderSummaryComponent', () => {
+describe('ItemSummaryComponent', () => {
   let page: Page;
-  let fixture: ComponentFixture<OrderSummaryComponent>;
-  let component: OrderSummaryComponent;
+  let fixture: ComponentFixture<ItemSummaryComponent>;
+  let component: ItemSummaryComponent;
 
   class Page {
     products: MemoizedSelector<ShopState, List<Product>>;
@@ -35,10 +35,17 @@ describe('OrderSummaryComponent', () => {
     get itemRows(): Array<DebugElement> {
       return fixture.debugElement.query(By.css('tbody')).queryAll(By.css('tr'));
     }
+
+    get subTotal(): string | undefined {
+      const tableFooter = fixture.debugElement.query(By.css('tfoot'));
+      return tableFooter
+        ? tableFooter.query(By.css('td')).nativeElement.innerHTML
+        : undefined;
+    }
   }
 
   function createComponent(): void {
-    fixture = TestBed.createComponent(OrderSummaryComponent);
+    fixture = TestBed.createComponent(ItemSummaryComponent);
     component = fixture.componentInstance;
     page = new Page();
     fixture.detectChanges();
@@ -46,7 +53,7 @@ describe('OrderSummaryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [OrderSummaryComponent],
+      declarations: [ItemSummaryComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
@@ -57,21 +64,19 @@ describe('OrderSummaryComponent', () => {
     expect(fixture.debugElement.componentInstance).toBeTruthy();
   });
 
-  it('should display all items in cart', () => {
+  it('should display all items', () => {
     component.items = mockData;
     fixture.detectChanges();
 
     expect(page.itemRows.length).toBe(10);
   });
 
-  it('should calculate the costs for one product', () => {
-    component.items = mockData;
+  it('should display a sum when given', () => {
+    expect(page.subTotal).toBeUndefined();
+
+    component.sum = '1234.56';
     fixture.detectChanges();
 
-    const sum = page.itemRows[0].nativeElement
-      .querySelector('.sum')
-      .innerHTML.trim();
-
-    expect(sum).toBe('€6.00');
+    expect(page.subTotal).toContain('1,234.56');
   });
 });

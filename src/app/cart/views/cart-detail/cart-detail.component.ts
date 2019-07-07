@@ -25,12 +25,12 @@ export class CartDetailComponent implements OnInit {
     this.sum$ = this.store.pipe(select(getSumOfCart));
   }
 
-  changeAmount(product: Product, amount: number): void {
-    const difference = amount - product.amountInCart;
+  changeAmount({ item, amount }: { item: Product; amount: number }): void {
+    const difference = amount - item.amountInCart;
     const action =
       difference > 0
-        ? addToCart({ product, amount: difference })
-        : removeFromCart({ product, amount: -difference });
+        ? addToCart({ product: item, amount: difference })
+        : removeFromCart({ product: item, amount: -difference });
 
     this.store.dispatch(action);
   }
