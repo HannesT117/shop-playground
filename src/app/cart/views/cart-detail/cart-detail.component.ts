@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -9,8 +9,7 @@ import { getItemsInCart, getSumOfCart } from 'src/app/store/selectors';
 @Component({
   selector: 'app-cart-detail',
   templateUrl: './cart-detail.component.html',
-  styleUrls: ['./cart-detail.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./cart-detail.component.scss']
 })
 export class CartDetailComponent implements OnInit {
   items$: Observable<Iterable<Product>>;
