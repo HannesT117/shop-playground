@@ -1,13 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { StoreModule } from '@ngrx/store';
 
 import { SharedModule } from '../shared/shared.module';
 import { OrdersRoutingModule } from './orders-routing.module';
+import * as fromOrders from './orders.reducer';
 import { OrderCheckoutComponent } from './views/order-checkout/order-checkout.component';
 import { OrderConfirmationComponent } from './views/order-confirmation/order-confirmation.component';
 
 @NgModule({
   declarations: [OrderCheckoutComponent, OrderConfirmationComponent],
-  imports: [CommonModule, SharedModule, OrdersRoutingModule]
+  imports: [
+    CommonModule,
+    SharedModule,
+    StoreModule.forFeature('orders', fromOrders),
+    OrdersRoutingModule
+  ]
 })
 export class OrdersModule {}

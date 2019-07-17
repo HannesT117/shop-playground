@@ -6,7 +6,6 @@ import { Address, Product } from 'src/app/shared/interfaces';
 import { createOrder } from 'src/app/store/actions';
 import { ShopState } from 'src/app/store/reducers';
 import { getCartSummary } from 'src/app/store/selectors';
-import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: 'app-order-checkout',
@@ -30,8 +29,8 @@ export class OrderCheckoutComponent implements OnInit {
   }
 
   submit(address: Address): void {
-    const id = uuid();
-    this.store.dispatch(createOrder({ address, id }));
+    this.store.dispatch(createOrder({ address }));
+    // FIXME get id back
     this.router.navigate([id], {
       relativeTo: this.route
     });

@@ -1,7 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { List } from 'immutable';
 
-import { Product } from '../shared/interfaces/product';
 import { ShopState } from './reducers';
 
 export const shopState = createFeatureSelector<ShopState>('shop');
@@ -18,10 +16,7 @@ export const getOrders = createSelector(
 
 export const getItemsInCart = createSelector(
   shopState,
-  state =>
-    (state.products as List<Product>).filter(
-      product => product.amountInCart > 0
-    )
+  state => state.products.filter(product => product.amountInCart > 0)
 );
 
 export const getSumOfCart = createSelector(

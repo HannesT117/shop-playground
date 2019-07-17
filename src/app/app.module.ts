@@ -7,16 +7,13 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
-import { reducer } from './store/reducers';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     SharedModule,
-    StoreModule.forRoot({
-      shop: reducer
-    }),
+    StoreModule.forRoot({}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     AppRoutingModule
   ],
