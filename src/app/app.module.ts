@@ -6,6 +6,10 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CartModule } from './cart/cart.module';
+import { OrdersModule } from './orders/orders.module';
+import { ProductsModule } from './products/products.module';
+import { metaReducers, reducer } from './reducers';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -13,8 +17,11 @@ import { SharedModule } from './shared/shared.module';
   imports: [
     BrowserModule,
     SharedModule,
-    StoreModule.forRoot({}),
+    StoreModule.forRoot(reducer, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
+    ProductsModule,
+    OrdersModule,
+    CartModule,
     AppRoutingModule
   ],
   providers: [],

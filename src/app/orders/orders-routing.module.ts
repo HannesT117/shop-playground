@@ -6,16 +6,17 @@ import { OrderConfirmationComponent } from './views/order-confirmation/order-con
 
 const routes: Routes = [
   {
-    path: 'checkout',
-    component: OrderCheckoutComponent
-  },
-  {
-    path: ':id',
-    component: OrderConfirmationComponent
-  },
-  {
-    path: '',
-    component: OrderCheckoutComponent
+    path: 'orders',
+    children: [
+      {
+        path: 'checkout',
+        component: OrderCheckoutComponent
+      },
+      {
+        path: ':id',
+        component: OrderConfirmationComponent
+      }
+    ]
   }
 ];
 

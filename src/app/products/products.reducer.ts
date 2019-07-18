@@ -1,26 +1,19 @@
+import { EntityState } from '@ngrx/entity';
 import { Action, createReducer } from '@ngrx/store';
-import { List } from 'immutable';
 
-import { ProductState } from './products.state';
-import { ReadonlyProduct } from './readonly-product';
+import { Product } from '../shared/interfaces';
+import { mockItems } from './mock-items';
+import { adapter } from './products.adapter';
 
-const initialState: ProductState = List(
-  Array(40)
-    .fill('')
-    .map(
-      (_, index) =>
-        new ReadonlyProduct({
-          id: index.toString(),
-          description: `Item ${index}`,
-          price: (Math.random() * Math.floor(1000)).toFixed(2).toString(),
-          stock: Math.floor(Math.random() * Math.floor(30)),
-          amountInCart: 0
-        })
-    )
+export interface ShopState extends EntityState<Product> {}
+
+const initialState: ShopState = adapter.addMany(
+  mockItems,
+  adapter.getInitialState()
 );
 
-const productReducer = createReducer(initialState);
+const shopReducer = createReducer(initialState);
 
-export function reducer(state: ProductState | undefined, action: Action) {
-  return productReducer(state, action);
+export function reducer(state: ShopState | undefined, action: Action) {
+  return shopReducer(state, action);
 }

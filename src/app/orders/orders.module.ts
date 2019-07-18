@@ -4,7 +4,7 @@ import { StoreModule } from '@ngrx/store';
 
 import { SharedModule } from '../shared/shared.module';
 import { OrdersRoutingModule } from './orders-routing.module';
-import * as fromOrders from './orders.reducer';
+import { reducer } from './orders.reducer';
 import { OrderCheckoutComponent } from './views/order-checkout/order-checkout.component';
 import { OrderConfirmationComponent } from './views/order-confirmation/order-confirmation.component';
 
@@ -13,7 +13,7 @@ import { OrderConfirmationComponent } from './views/order-confirmation/order-con
   imports: [
     CommonModule,
     SharedModule,
-    StoreModule.forFeature('orders', fromOrders),
+    StoreModule.forFeature('orders', reducer),
     OrdersRoutingModule
   ]
 })

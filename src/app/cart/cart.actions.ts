@@ -2,14 +2,16 @@ import { createAction, props } from '@ngrx/store';
 
 import { Product } from '../shared/interfaces';
 
-export const add = createAction(
+const add = createAction(
   '[Cart] Add',
   props<{ product: Product; amount?: number }>()
 );
 
-export const remove = createAction(
+const remove = createAction(
   '[Cart] Remove element',
   props<{ product: Product; amount?: number }>()
 );
 
-export const empty = createAction('[Cart] Empty');
+const empty = createAction('[Cart] Empty');
+
+export const CartActions = { add, remove, empty };

@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { addToCart } from 'src/app/store/actions';
+import { SharedActions } from 'src/app/shared/state/actions';
 
 import { Product } from '../../../shared/interfaces/product';
-import * as fromProducts from '../../../store/selectors';
+import { ShopState } from '../../products.reducer';
+import * as fromProducts from '../../products.selectors';
 
 @Component({
   selector: 'app-product-list',
@@ -13,15 +14,15 @@ import * as fromProducts from '../../../store/selectors';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductListComponent implements OnInit {
-  products$: Observable<Iterable<Product>>;
+  products$: Observable<Array<Product>>;
 
-  constructor(private store: Store<Iterable<Product>>) {}
+  constructor(private store: Store<ShopState>) {}
 
   ngOnInit() {
-    this.products$ = this.store.pipe(select(fromProducts.getProducts));
+    this.products$ = this.store.pipe(select(fromProducts.getAllItems));
   }
 
   select(product: Product) {
-    this.store.dispatch(addToCart({ product }));
+    this.store.dispatch(SharedActions.selectItem({ product }));
   }
 }

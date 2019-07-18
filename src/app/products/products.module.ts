@@ -4,7 +4,7 @@ import { StoreModule } from '@ngrx/store';
 
 import { SharedModule } from '../shared/shared.module';
 import { ProductsRoutingModule } from './products-routing.module';
-import * as fromProducts from './products.reducer';
+import { reducer } from './products.reducer';
 import { ProductListComponent } from './views/product-list/product-list.component';
 
 @NgModule({
@@ -12,7 +12,7 @@ import { ProductListComponent } from './views/product-list/product-list.componen
   imports: [
     CommonModule,
     SharedModule,
-    StoreModule.forFeature('products', fromProducts),
+    StoreModule.forFeature('shop', reducer),
     ProductsRoutingModule
   ]
 })

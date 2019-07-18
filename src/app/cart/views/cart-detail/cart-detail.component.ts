@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Product } from 'src/app/shared/interfaces/product';
-import { addToCart, removeFromCart } from 'src/app/store/actions';
-import { getItemsInCart, getSumOfCart } from 'src/app/store/selectors';
+
+import { CartActions } from '../../cart.actions';
 
 @Component({
   selector: 'app-cart-detail',
@@ -21,16 +21,16 @@ export class CartDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.items$ = this.store.pipe(select(getItemsInCart));
-    this.sum$ = this.store.pipe(select(getSumOfCart));
+    // this.items$ = this.store.pipe(select(selectItems));
+    // this.sum$ = this.store.pipe(select(getSumOfCart));
   }
 
   changeAmount({ item, amount }: { item: Product; amount: number }): void {
     const difference = amount - item.amountInCart;
     const action =
       difference > 0
-        ? addToCart({ product: item, amount: difference })
-        : removeFromCart({ product: item, amount: -difference });
+        ? CartActions.add({ product: item, amount: difference })
+        : CartActions.remove({ product: item, amount: -difference });
 
     this.store.dispatch(action);
   }

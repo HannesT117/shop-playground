@@ -3,6 +3,6 @@ import { Product } from './product';
 
 export interface Order {
   id: string;
-  items: Iterable<Product>;
+  items: Array<Product>;
   address: Address;
 }

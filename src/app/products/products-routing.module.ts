@@ -5,7 +5,7 @@ import { ProductListComponent } from './views/product-list/product-list.componen
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'products',
     component: ProductListComponent
   }
 ];

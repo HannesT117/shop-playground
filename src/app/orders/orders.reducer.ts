@@ -1,16 +1,23 @@
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
-import { List, Map } from 'immutable';
 
-import { Address } from '../shared/interfaces';
+import { Address, Order, Product } from '../shared/interfaces';
 import * as fromActions from './orders.actions';
-import { OrderState } from './orders.state';
 
-const initialState: OrderState = List();
+export interface OrderState extends EntityState<Order> {
+  currentOrder: string | null;
+}
+
+const adapter: EntityAdapter<Order> = createEntityAdapter<Order>();
+const initialState: OrderState = adapter.getInitialState({
+  currentOrder: null
+});
+
 const orderState = createReducer(
   initialState,
   on(
     fromActions.createOrder,
-    (state, { address, id }) => createOrder(state, id, address, undefined) // FIXME
+    (state, { address, id }) => createOrder(state, id, address, []) // FIXME
   )
 );
 
@@ -18,13 +25,9 @@ function createOrder(
   state: OrderState,
   id: string,
   address: Address,
-  items: Map<string, number>
+  items: Product[]
 ): OrderState {
-  return state.push({
-    id,
-    address,
-    items
-  });
+  return adapter.addOne({ id, address, items }, state);
 }
 
 export function reducer(state: OrderState, action: Action) {

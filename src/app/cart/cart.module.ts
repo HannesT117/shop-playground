@@ -4,7 +4,7 @@ import { StoreModule } from '@ngrx/store';
 
 import { SharedModule } from '../shared/shared.module';
 import { CartRoutingModule } from './cart-routing.module';
-import * as fromCart from './cart.reducer';
+import { reducer } from './cart.reducer';
 import { CartDetailComponent } from './views/cart-detail/cart-detail.component';
 
 @NgModule({
@@ -12,7 +12,7 @@ import { CartDetailComponent } from './views/cart-detail/cart-detail.component';
   imports: [
     CommonModule,
     SharedModule,
-    StoreModule.forFeature('orders', fromCart),
+    StoreModule.forFeature('cart', reducer),
     CartRoutingModule
   ]
 })

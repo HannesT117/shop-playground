@@ -5,7 +5,7 @@ import { CartDetailComponent } from './views/cart-detail/cart-detail.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'cart',
     component: CartDetailComponent
   }
 ];

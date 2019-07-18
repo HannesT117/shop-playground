@@ -1,39 +1,55 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { Map } from 'immutable';
+import produce from 'immer';
 
-import * as fromActions from './cart.actions';
-import { CartState } from './cart.state';
+import { Product } from '../shared/interfaces';
+import { SharedActions } from '../shared/state/actions';
+import { CartActions } from './cart.actions';
 
-const initialState: CartState = Map();
+export interface CartState {
+  items: Map<string, number>;
+}
+
+const initialState: CartState = {
+  items: new Map<string, number>()
+};
+
 const cartState = createReducer(
   initialState,
-  on(fromActions.add, addToCart),
-  on(fromActions.remove, removeFromCart),
-  on(fromActions.empty, emptyCart)
+  on(SharedActions.selectItem, addToCart),
+  on(CartActions.add, addToCart),
+  on(CartActions.remove, removeFromCart),
+  on(CartActions.empty, emptyCart)
 );
 
-function removeFromCart(state: CartState, { product, amount = 1 }) {
-  const [key, value] = state.findEntry(id => id === product.id);
+function removeFromCart(
+  state: CartState,
+  { product, amount = 1 }: { product: Product; amount?: number }
+) {
+  return produce(state, draft => {
+    const originalAmount = state.items.get(product.id) || 0;
 
-  if (value === 1) {
-    state.remove(key);
-  } else {
-    return state.set(key, value - 1);
-  }
+    if (originalAmount === amount) {
+      draft.items.delete(product.id);
+    } else if (originalAmount > amount) {
+      draft.items.set(product.id, originalAmount - amount);
+    } else {
+      // ignore
+    }
+  });
 }
 
 function addToCart(state: CartState, { product, amount = 1 }) {
-  const [key, value] = state.findEntry((_, id) => id === product.id);
+  return produce(state, draft => {
+    const originalAmount = state.items.get(product.id) || 0;
 
-  if (!key) {
-    return state;
-  }
-
-  return state.set(key, value + amount);
+    draft.items.set(product.id, originalAmount + amount);
+  });
 }
 
 function emptyCart(state: CartState) {
-  return state.clear();
+  return produce(state, draft => {
+    draft.items.clear();
+  });
 }
 
 export function reducer(state: CartState, action: Action) {
